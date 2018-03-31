@@ -6,16 +6,38 @@ autoSetCanvasSize(yyy)
 listenToUser(yyy)
 
 var eraserEnabled = false
-eraser.onclick = function () {
-    eraserEnabled = true
-    actions.className = 'actions x'
-
-}
-brush.onclick = function () {
+pen.onclick = function() {
     eraserEnabled = false
-    actions.className = 'actions'
+    pen.classList.add('active')
+    eraser.classList.remove('active')
+}
+eraser.onclick = function() {
+    eraserEnabled = true
+    eraser.classList.add('active')
+    pen.classList.remove('active')
 }
 
+red.onclick = function(){
+    context.fillStyle = 'red'
+    context.strokeStyle = 'red'
+    red.classList.add('active')
+    green.classList.remove('active')
+    blue.classList.remove('active')
+}
+green.onclick = function(){
+    context.fillStyle = 'green'
+    context.strokeStyle = 'green'
+    red.classList.remove('active')
+    green.classList.add('active')
+    blue.classList.remove('active')
+}
+blue.onclick = function(){
+    context.fillStyle = 'blue'
+    context.strokeStyle = 'blue'
+    red.classList.remove('active')
+    green.classList.remove('active')
+    blue.classList.add('active')
+}
 // 封装好的函数
 
 // 自适应画布大小
@@ -40,7 +62,7 @@ function autoSetCanvasSize(canvas) {
 // 画个圆
 function drawCircle(x, y, radius) {
     context.beginPath()
-    context.fillstyle = 'black'
+    // context.fillstyle = 'black'
     // 圆心，半径，开始弧度，结束弧度，默认为顺时针false
     context.arc(x, y, radius, 0, Math.PI * 2)
     context.fill()
@@ -49,7 +71,7 @@ function drawCircle(x, y, radius) {
 // 画条线
 function drawLine(x1, y1, x2, y2) {
     context.beginPath()
-    context.strokeStyle = 'black'
+    // context.strokeStyle = 'black'
     context.moveTo(x1, y1) //起点
     context.lineWidth = 5 //线的宽度
     context.lineTo(x2, y2) //终点
