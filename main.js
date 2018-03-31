@@ -1,42 +1,78 @@
 var yyy = document.getElementById('xxx')
 var context = yyy.getContext('2d');
+var lineWidth = 5 //线的宽度
+
+
+
 
 autoSetCanvasSize(yyy)
+
+downloadImageBgc('#fff')
 
 listenToUser(yyy)
 
 var eraserEnabled = false
-pen.onclick = function() {
+pen.onclick = function () {
     eraserEnabled = false
     pen.classList.add('active')
     eraser.classList.remove('active')
 }
-eraser.onclick = function() {
+eraser.onclick = function () {
     eraserEnabled = true
     eraser.classList.add('active')
     pen.classList.remove('active')
 }
 
-red.onclick = function(){
+red.onclick = function () {
     context.fillStyle = 'red'
     context.strokeStyle = 'red'
     red.classList.add('active')
     green.classList.remove('active')
     blue.classList.remove('active')
 }
-green.onclick = function(){
+green.onclick = function () {
     context.fillStyle = 'green'
     context.strokeStyle = 'green'
     red.classList.remove('active')
     green.classList.add('active')
     blue.classList.remove('active')
 }
-blue.onclick = function(){
+blue.onclick = function () {
     context.fillStyle = 'blue'
     context.strokeStyle = 'blue'
     red.classList.remove('active')
     green.classList.remove('active')
     blue.classList.add('active')
+}
+// 画笔粗细
+thin.onclick = function () {
+    lineWidth = 5;
+}
+thick.onclick = function () {
+    lineWidth = 8;
+}
+
+// 清屏
+clear.onclick = function () {
+    context.clearRect(0, 0, yyy.width, yyy.height);
+}
+
+//下载你画的画儿
+download.onclick = function () {
+    var url = yyy.toDataURL("image/png")
+    var a = document.createElement('a')
+    document.body.appendChild(a)
+    a.href = url
+    a.download = '我的画儿'
+    a.target = '_blank'
+    a.click()
+}
+
+//由于下载的是png格式的图，是透明的，如果你改为jpeg的话，那么背景即是黑色的
+// 如何改为白色底
+function downloadImageBgc(color) {
+    context.fillStyle = color;
+    context.fillRect(0, 0, yyy.width, yyy.height);
 }
 // 封装好的函数
 
@@ -73,11 +109,12 @@ function drawLine(x1, y1, x2, y2) {
     context.beginPath()
     // context.strokeStyle = 'black'
     context.moveTo(x1, y1) //起点
-    context.lineWidth = 5 //线的宽度
+    context.lineWidth = lineWidth
     context.lineTo(x2, y2) //终点
     context.stroke()
     context.closePath()
 }
+
 
 //监听用户鼠标
 function listenToUser(canvas) {
@@ -89,11 +126,11 @@ function listenToUser(canvas) {
     // 特性检测，检测的不是设备
     if (document.body.ontouchstart !== undefined) {
         //触屏设备
-        canvas.ontouchstart = function(aaa){
+        canvas.ontouchstart = function (aaa) {
             console.log('开始摸我了')
             var x = aaa.touches[0].clientX
             var y = aaa.touches[0].clientY
-            console.log(x,y)
+            console.log(x, y)
             using = true
             if (eraserEnabled) {
                 context.clearRect(x - 5, y - 5, 10, 10);
@@ -105,11 +142,11 @@ function listenToUser(canvas) {
             }
         }
 
-        canvas.ontouchmove = function(aaa){
+        canvas.ontouchmove = function (aaa) {
             console.log('边摸边动')
             var x = aaa.touches[0].clientX
             var y = aaa.touches[0].clientY
-            console.log(x,y)
+            console.log(x, y)
             if (!using) { return }
 
             if (eraserEnabled) {
@@ -124,7 +161,7 @@ function listenToUser(canvas) {
             }
         }
 
-        canvas.ontouchend = function(){
+        canvas.ontouchend = function () {
             console.log('摸完了')
             using = false
         }
